@@ -209,6 +209,72 @@
 	}
 
   }
+  	let curDay;
+   let curIndex;
+   let curName;
+   let curPeriod;
+   let curStyle;
+
+   function showcurData(day,index,name,period,style){
+	curDay = day;
+    curIndex = index;
+    curName = name;
+    curPeriod = period;
+    curStyle = style;
+   }
+
+function deleteTimeSlot(day,index){
+	if (day === "Monday") {
+  	timetable.Monday.splice(index, 1);
+  	timetable = timetable;
+	}
+    else if (day === "Tuesday") {
+  	timetable.Tuesday.splice(index, 1);
+  	timetable = timetable;
+	}
+	else if (day === "Wednesday") {
+  	timetable.Wednesday.splice(index, 1);
+  	timetable = timetable;
+	}
+	else if (day === "Thursday") {
+  	timetable.Thursday.splice(index, 1);
+  	timetable = timetable;
+	}
+	else if (day === "Friday") {
+  	timetable.Friday.splice(index, 1);
+  	timetable = timetable;
+	}
+
+	function setTimeSlot (day,index,newName,newPeriod,newStyle){
+
+      if (day==="Monday"){
+	  timetable.Monday[index].name= newName
+      timetable.Monday[index].period= newPeriod
+      timetable.Monday[index].style= newStyle
+	  }
+	  else if  (day==="Tuesday"){
+        timetable.Tuesday[index].name= newName
+      timetable.Tuesday[index].period= newPeriod
+      timetable.Tuesday[index].style= newStyle
+	  }
+	  else if (day==="Wednesday"){
+		timetable.Wednesday[index].name= newName
+      timetable.Wednesday[index].period= newPeriod
+      timetable.Wednesday[index].style= newStyle
+	  }
+      else if(day==="Thrusday"){
+		timetable.Thursday[index].name= newName
+      timetable.Thursday[index].period= newPeriod
+      timetable.Thursday[index].style= newStyle
+	  }
+      else if(day==="Friday"){
+		timetable.Friday[index].name= newName
+      timetable.Friday[index].period= newPeriod
+      timetable.Friday[index].style= newStyle
+	  }
+
+	}
+}
 
 </script>
 
@@ -232,9 +298,17 @@
     <tbody>
       <tr>
         <th class="table-dark" scope="row">Monday</th>
-       {#each timetable.Monday as timeSlot}
+       {#each timetable.Monday as timeSlot,index}
          <td colspan={timeSlot.period} class={timeSlot.style}>
-         <button type="button" class="btn"  data-bs-toggle="modal" data-bs-target="#EditModal"> {timeSlot.name}  </button>
+         <button type="button" class="btn"  data-bs-toggle="modal" data-bs-target="#EditModal" on:click={() =>
+			showcurData(
+			"Monday",
+			  index,
+			  timeSlot.name,
+			  timeSlot.period,
+			  timeSlot.style
+			)}
+> {timeSlot.name}  </button>
                        
          </td>
        {/each} 
@@ -242,9 +316,16 @@
       </tr>
       <tr>
         <th class="table-dark" scope="row">Tuesday</th>
-        {#each timetable.Tuesday as timeSlot}
+        {#each timetable.Tuesday as timeSlot,index}
         <td colspan={timeSlot.period} class={timeSlot.style}>
-        <button type="button" class="btn"  data-bs-toggle="modal" data-bs-target="#EditModal"> {timeSlot.name}  </button>
+        <button type="button" class="btn"  data-bs-toggle="modal" data-bs-target="#EditModal"  on:click={() =>
+			showcurData(
+			"Tuesday",
+			  index,
+			  timeSlot.name,
+			  timeSlot.period,
+			  timeSlot.style
+			)}> {timeSlot.name}  </button>
 		</td>
                       
       {/each}
@@ -252,18 +333,33 @@
       </tr>
       <tr>
         <th class="table-dark" scope="row">Wednesday</th>
-        {#each timetable.Wednesday as timeSlot}
+        {#each timetable.Wednesday as timeSlot,index}
         <td colspan={timeSlot.period} class={timeSlot.style}>
-        <button type="button" class="btn"  data-bs-toggle="modal" data-bs-target="#EditModal"> {timeSlot.name}  </button>
+        <button type="button" class="btn"  data-bs-toggle="modal" data-bs-target="#EditModal"  on:click={() =>
+			showcurData(
+			"Wednesday",
+			  index,
+			  timeSlot.name,
+			  timeSlot.period,
+			  timeSlot.style
+			)}> {timeSlot.name}  </button>
         </td>
       {/each}
 	  <td><button class="btn" on:click={() => addTimeSlot("Wednesday")}>+</button></td>
       </tr>
       <tr>
         <th class="table-dark" scope="row">Thursday</th>
-        {#each timetable.Thursday as timeSlot}
+        {#each timetable.Thursday as timeSlot,index}
         <td colspan={timeSlot.period} class={timeSlot.style}>
-        <button type="button" class="btn"  data-bs-toggle="modal" data-bs-target="#EditModal"> {timeSlot.name}  </button>
+        <button type="button" class="btn"  data-bs-toggle="modal" data-bs-target="#EditModal" on:click={() =>
+			showcurData(
+			"Thursday",
+			  index,
+			  timeSlot.name,
+			  timeSlot.period,
+			  timeSlot.style
+			)}> {timeSlot.name}  </button>
+       
 		
         </td>
       {/each}
@@ -271,9 +367,16 @@
       </tr>
       <tr>
         <th class="table-dark" scope="row">Friday</th>
-        {#each timetable.Friday as timeSlot}
+        {#each timetable.Friday as timeSlot,index}
          <td colspan={timeSlot.period} class={timeSlot.style}>
-         <button type="button" class="btn"  data-bs-toggle="modal" data-bs-target="#EditModal"> {timeSlot.name}  </button>
+         <button type="button" class="btn"  data-bs-toggle="modal" data-bs-target="#EditModal" on:click={() =>
+			showcurData(
+			"Friday",
+			  index,
+			  timeSlot.name,
+			  timeSlot.period,
+			  timeSlot.style
+			)}> {timeSlot.name}  </button>
 		 </td>             
 		 
        {/each}
@@ -294,15 +397,15 @@
 		<div class="modal-body">
 			<div class="input-group mb-3">
 				<span class="input-group-text" id="name">Name</span>
-				<input type="text" class="form-control" >
+				<input type="text" class="form-control" bind:value={curName}>
 			</div>
 			<div class="input-group mb-3">
 				<span class="input-group-text" id="period">Period</span>
-				<input type="number" class="form-control" >
+				<input type="number" class="form-control" bind:value={curPeriod} >
 			</div>
 			<div class="input-group mb-3">
 				<label class="input-group-text" for="inputGroupSelect01">Style</label>
-				<select class="form-select" id="inputGroupSelect01">
+				<select class="form-select" id="inputGroupSelect01" bind:value={curStyle}>
 				  <option value="">Default</option>
 				  <option value="table-primary">Blue</option>
 				  <option value="table-success">Green</option>
@@ -314,7 +417,13 @@
 		</div>
 		<div class="modal-footer">
 		  <button type="button" class="btn btn-secondary" >Cancle</button>
-		  <button type="button" class="btn btn-danger" >Delete</button>
+		  <button
+      	type="button"
+      	class="btn btn-danger"
+      	data-bs-dismiss="modal"
+      	on:click={() => deleteTimeSlot(curDay, curIndex)}>Delete</button
+    	>
+
 		  <button type="button" class="btn btn-primary">Save changes</button>
 		</div>
 	  </div>
