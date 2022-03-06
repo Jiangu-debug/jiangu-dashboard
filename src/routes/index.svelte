@@ -244,37 +244,39 @@ function deleteTimeSlot(day,index){
   	timetable.Friday.splice(index, 1);
   	timetable = timetable;
 	}
-
-	function setTimeSlot (day,index,newName,newPeriod,newStyle){
-
-      if (day==="Monday"){
-	  timetable.Monday[index].name= newName
-      timetable.Monday[index].period= newPeriod
-      timetable.Monday[index].style= newStyle
-	  }
-	  else if  (day==="Tuesday"){
-        timetable.Tuesday[index].name= newName
-      timetable.Tuesday[index].period= newPeriod
-      timetable.Tuesday[index].style= newStyle
-	  }
-	  else if (day==="Wednesday"){
-		timetable.Wednesday[index].name= newName
-      timetable.Wednesday[index].period= newPeriod
-      timetable.Wednesday[index].style= newStyle
-	  }
-      else if(day==="Thrusday"){
-		timetable.Thursday[index].name= newName
-      timetable.Thursday[index].period= newPeriod
-      timetable.Thursday[index].style= newStyle
-	  }
-      else if(day==="Friday"){
-		timetable.Friday[index].name= newName
-      timetable.Friday[index].period= newPeriod
-      timetable.Friday[index].style= newStyle
-	  }
-
-	}
+	saveEntry() 
 }
+
+function setTimeSlot (day,index,newName,newPeriod,newStyle){
+	  timetable[day][index].name= newName
+      timetable[day][index].period= newPeriod
+      timetable[day][index].style= newStyle
+	  saveEntry()
+	}
+
+// Upsert entry
+async function saveEntry() {
+  const { error } = await supabase.from("studentEntries").upsert(
+    {
+      user_id: supabase.auth.user().id,
+      timetable: timetable,
+    },
+    { onConflict: "user_id" }
+  );
+  if (error) alert(error.message);
+}
+
+// Get entries
+async function getEntries() {
+  const { data, error } = await supabase.from("studentEntries").select();
+  if (error) alert(error.message);
+
+  if (data != "") {
+    timetable = data[0].timetable;
+  }
+}
+
+getEntries();
 
 </script>
 
@@ -416,15 +418,14 @@ function deleteTimeSlot(day,index){
 			  </div>
 		</div>
 		<div class="modal-footer">
-		  <button type="button" class="btn btn-secondary" >Cancle</button>
+		  <button type="button" class="btn btn-secondary" >Cancel</button>
 		  <button
       	type="button"
       	class="btn btn-danger"
       	data-bs-dismiss="modal"
-      	on:click={() => deleteTimeSlot(curDay, curIndex)}>Delete</button
-    	>
+      	on:click={() => deleteTimeSlot(curDay, curIndex)}>Delete</button>
 
-		  <button type="button" class="btn btn-primary">Save changes</button>
+		 <button type="button" class="btn btn-primary" data-bs-dismiss="modal" on:click={() => setTimeSlot(curDay, curIndex,curName,curPeriod,curStyle)}>Save changes</button>
 		</div>
 	  </div>
 	</div>
